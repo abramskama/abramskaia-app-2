@@ -1,0 +1,71 @@
+version: '3'
+services:
+
+  #PHP Service
+  &app-service app: &app-service-template
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: digitalocean.com/php
+    container_name: app
+    restart: unless-stopped
+    tty: true
+    environment:
+      SERVICE_NAME: app
+      SERVICE_TAGS: dev
+      SCHEDULE_PERIOD: 60
+      HOME: /home/user
+      MONGO_SERVER: mongodb
+      MONGO_INITDB_DATABASE: abramskaia
+      MONGO_INITDB_ROOT_USERNAME: abramskaia
+      MONGO_INITDB_ROOT_PASSWORD: 2258796
+    working_dir: /var/www
+    volumes:
+      - ./:/var/www
+      - ./php/local.ini:/usr/local/etc/php/conf.d/local.ini
+    networks:
+      - app-network
+    depends_on:
+      - mongodb
+
+  #Nginx Service
+  webserver:
+    image: nginx:alpine
+    container_name: webserver
+    restart: unless-stopped
+    tty: true
+    ports:
+      - "9998:80"
+      - "443:443"
+    volumes:
+      - ./:/var/www
+      - ./nginx/conf.d/:/etc/nginx/conf.d/
+    networks:
+      - app-network
+
+  mongodb:
+    image: mongo
+    container_name: mongodb
+    ports:
+      - 27017:27017
+    environment:
+      - MONGO_INITDB_DATABASE=abramskaia
+      - MONGO_INITDB_ROOT_USERNAME=abramskaia
+      - MONGO_INITDB_ROOT_PASSWORD=2258796
+    volumes:
+      # seeding scripts
+      - ./mongo-entrypoint:/docker-entrypoint-initdb.d
+      # named volumes
+      - mongodb:/data/db
+      - mongoconfig:/data/configdb
+    networks:
+      - app-network
+
+#Docker Networks
+networks:
+  app-network:
+    driver: bridge
+#Volumes
+volumes:
+  mongodb:
+  mongoconfig:
