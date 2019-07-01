@@ -17,6 +17,8 @@ gir, docker, docker compose
 
 ## Короткая инструкция ##
 
+Сначала удалить все из abramskaia-app
+
 В терминале:
 
 	git clone https://github.com/abramskama/abramskaia-app-2.git abramskaia-app-2 &&
