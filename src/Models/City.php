@@ -12,9 +12,16 @@ class City
     private $db;
     private $collection = 'Cities';
 
+    private $client;
+
     public function __construct(Db $db)
     {
         $this->db = $db;
+    }
+
+    private function loadClient()
+    {
+        $this->client = new N1ApiClient();
     }
 
     public function all() : array
@@ -52,5 +59,23 @@ class City
     public function addOfferCount(array $data)
     {
         $this->db->pushToArray($this->collection, ['name' => $this->name], 'offer_counts', $data);
+    }
+
+    public function loadCities()
+    {
+        $this->db->dropCollection($this->collection);
+        $this->db->createIndex($this->collection, 'region_id', ['unique' => true]);
+
+        $this->loadClient();
+        $regionIDList =  $this->client->getRegionIDList();
+
+        foreach($regionIDList as $regionID) {
+
+            if($name =  $this->client->getCityName($regionID)) {
+                $this->loadFromArray(['regionId' => $regionID, 'name' => $name]);
+                $this->save();
+            }
+
+        }
     }
 }

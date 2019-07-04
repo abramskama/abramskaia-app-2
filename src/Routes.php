@@ -5,5 +5,6 @@ return [
     ['GET', '/testCreate', ['App\Controllers\CityController', 'testCreate']],
     ['GET', '/testAll', ['App\Controllers\CityController', 'testAll']],
     ['GET', '/testAddOfferCount', ['App\Controllers\CityController', 'testAddOfferCount']],
+    ['GET', '/testLoadCities', ['App\Controllers\CityController', 'testLoadCities']],
     ['GET', '/city/{id}/offers', ['App\Controllers\CityController', 'offers']],
 ];

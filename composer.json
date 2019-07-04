@@ -18,7 +18,8 @@
     "mustache/mustache": "^2.11",
     "rdlowrey/auryn": "^1.4",
     "twig/twig": "1.27.0",
-    "mongodb/mongodb": "^1"
+    "mongodb/mongodb": "^1",
+    "guzzlehttp/guzzle": "*"
   },
   "autoload": {
     "psr-4": {

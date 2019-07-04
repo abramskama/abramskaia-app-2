@@ -43,6 +43,13 @@ class CityController
         $this->response->setContent(print_r($cities, true));
     }
 
+    public function testLoadCities()
+    {
+        $this->city->loadCities();
+        $cities = $this->city->testAll();
+        $this->response->setContent(print_r($cities, true));
+    }
+
     public function testAll()
     {
         $cities = $this->city->testAll();

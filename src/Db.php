@@ -54,4 +54,14 @@ class Db
         );
 
     }
+
+    public function createIndex(string $collection, string $key, array $options = [])
+    {
+        return $this->dm->selectCollection($collection)->createIndex([$key => 1], $options);
+    }
+
+    public function dropCollection(string $collection)
+    {
+        $this->dm->selectCollection($collection)->drop();
+    }
 }
