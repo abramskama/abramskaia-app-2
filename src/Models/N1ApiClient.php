@@ -17,11 +17,20 @@ class N1ApiClient
     ];
     private $client;
 
+    /**
+     * Constructs N1ApiClient object
+     * Set client property - http client
+     * */
     function __construct()
     {
         $this->client = new Client();
     }
 
+    /**
+     * Made request to api and gets response as array
+     * @param int $regionID region_id
+     * @return array
+     * */
     private function getResponseArray(int $regionID) : array
     {
         $this->get_params['region_id'] = $regionID;
@@ -31,6 +40,11 @@ class N1ApiClient
         return $responseArray;
     }
 
+    /**
+     * Gets city name by region id
+     * @param int $regionID region_id
+     * @return string|null
+     */
     public function getCityName(int $regionID) : ?string
     {
         $responseArray = $this->getResponseArray($regionID);
@@ -42,6 +56,11 @@ class N1ApiClient
         return null;
     }
 
+    /**
+     * Gets offer count by region id
+     * @param int $regionID region_id
+     * @return string|null
+     */
     public function getCityOfferCount(int $regionID) : ?int
     {
         $responseArray = $this->getResponseArray($regionID);
@@ -53,6 +72,10 @@ class N1ApiClient
         return null;
     }
 
+    /**
+     * Gets region ids
+     * @return array
+     */
     public function getRegionIDList() : array
     {
         return $this->region_id_list;

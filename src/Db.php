@@ -9,6 +9,11 @@ class Db
 {
     private $dm;
 
+    /**
+     * Constructs db object
+     * Set $dm property - database object to connect to mongo database
+     * Connection properties gets from environment variables
+     * */
     public function __construct()
     {
         $env = getenv();
@@ -31,21 +36,33 @@ class Db
         $this->dm = $mongoClient->selectDatabase($mongoDatabase);
     }
 
-    public function createCollection(string $name)
-    {
-        $this->dm->createCollection($name);
-    }
-
+    /**
+     * Inserts document into collection
+     * @param string $collection collection name
+     * @param array $document array of document properties
+     * */
     public function createDocument(string $collection, array $document)
     {
         $this->dm->selectCollection($collection)->insertOne($document);
     }
 
+    /**
+     * Gets array of documents in collection
+     * @param string $collection collection name
+     * @return array
+     * */
     public function getDocuments(string $collection) : array
     {
         return $this->dm->selectCollection($collection)->find([])->toArray();
     }
 
+    /**
+     * Gets array of documents in collection with joined last element in provided array
+     * @param string $collection collection name
+     * @param array $documentFields array of fields which included in result
+     * @param string $array name of joined array in document
+     * @return array
+     * */
     public function getDocumentsWithLastElementInArray(string $collection, array $documentFields, string $array) : array
     {
         $project = [];
@@ -56,6 +73,12 @@ class Db
         return $this->dm->selectCollection($collection)->aggregate([[ '$project' => $project ]])->toArray();
     }
 
+    /**
+     * Inserts element to array in document
+     * @param string $collection collection name
+     * @param string $arrayName name of the array
+     * @param any $arrayElement element to insert
+     * */
     public function pushToArray(string $collection, array $document, string $arrayName, $arrayElement)
     {
         $this->dm->selectCollection($collection)->updateOne(
@@ -65,16 +88,32 @@ class Db
 
     }
 
+    /**
+     * Creates index in collection
+     * @param string $collection collection name
+     * @param string $key name of field
+     * @param array $options index options
+     * */
     public function createIndex(string $collection, string $key, array $options = [])
     {
-        return $this->dm->selectCollection($collection)->createIndex([$key => 1], $options);
+        $this->dm->selectCollection($collection)->createIndex([$key => 1], $options);
     }
 
+    /**
+     * Drop collection
+     * @param string $collection collection name
+     * */
     public function dropCollection(string $collection)
     {
         $this->dm->selectCollection($collection)->drop();
     }
 
+    /**
+     * Gets first document in collection with provided filter
+     * @param string $collection collection name
+     * @param array $filter filter options
+     * @return array
+     * */
     public function getDocument(string $collection, array $filter = []) : array
     {
         return (array)$this->dm->selectCollection($collection)->findOne($filter);
