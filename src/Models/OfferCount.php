@@ -29,12 +29,6 @@ class OfferCount
         $this->db->pushToArray($this->collection, ['region_id' => $this->regionId], $this->arrayName, $offerCount);
     }
 
-
-    public function all() : array
-    {
-        return [];
-    }
-
     public function loadFromArray(array $data)
     {
         foreach($data as $property => $value) {

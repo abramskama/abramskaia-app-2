@@ -5,7 +5,6 @@ use App\Db;
 
 class City
 {
-    private $id;
     private $regionId;
     private $name;
 
@@ -30,11 +29,6 @@ class City
     public function all() : array
     {
         return $this->db->getDocumentsWithLastElementInArray($this->collection, ['name', 'region_id'], 'offer_counts');
-    }
-
-    public function testAll() : array
-    {
-        return $this->db->getDocuments($this->collection);
     }
 
     public function loadFromArray(array $data)
@@ -92,5 +86,10 @@ class City
             }
 
         }
+    }
+
+    public function getCityByRegionId($regionId)
+    {
+        return $this->db->getDocument($this->collection, ['region_id' => $regionId]);
     }
 }

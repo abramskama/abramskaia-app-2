@@ -74,4 +74,9 @@ class Db
     {
         $this->dm->selectCollection($collection)->drop();
     }
+
+    public function getDocument(string $collection, array $filter = []) : array
+    {
+        return (array)$this->dm->selectCollection($collection)->findOne($filter);
+    }
 }

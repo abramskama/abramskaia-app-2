@@ -174,15 +174,15 @@
 
     }
 
-    function showOfferCountHistory(cityID)
+    function showOfferCountHistory(regionId)
     {
         $.ajax({
-            url:'/city/' + cityID + '/offers',
+            url:'/city/' + regionId,
             dataType:'JSON',
             method: 'GET',
             data:{},
             success:function(response){
-                if(Array.isArray(response)){
+                if(typeof response == 'object'){
                     renderChart(response)
                 }
                 else
@@ -193,12 +193,15 @@
         });
     }
 
-    function renderChart(offers)
+    function renderChart(city)
     {
+        let offers;
+        offers = city['offer_counts'];
+
         data = [];
 
         offers.forEach(function(offer){
-            data.push({x: new Date(offer.created_at).getTime() / 1000, y: offer.count});
+            data.push({x: new Date(offer.created_at.date).getTime() / 1000, y: offer.count});
         });
 
         if(typeof graph !== "object") {
