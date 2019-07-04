@@ -29,10 +29,7 @@ class City
 
     public function all() : array
     {
-        return [
-            ["name" => "Новосибирск", "latest_offer_count" => ["count" => 1]],
-            ["name" => "Москва", "latest_offer_count" => ["count" => 2]]
-        ];
+        return $this->db->getDocumentsWithLastElementInArray($this->collection, ['name', 'region_id'], 'offer_counts');
     }
 
     public function testAll() : array

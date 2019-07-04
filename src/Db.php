@@ -46,6 +46,16 @@ class Db
         return $this->dm->selectCollection($collection)->find([])->toArray();
     }
 
+    public function getDocumentsWithLastElementInArray(string $collection, array $documentFields, string $array) : array
+    {
+        $project = [];
+        foreach($documentFields as $field) {
+            $project[$field] = 1;
+        }
+        $project[ $array.'_last'] = ['$arrayElemAt' => ['$'.$array, -1]];
+        return $this->dm->selectCollection($collection)->aggregate([[ '$project' => $project ]])->toArray();
+    }
+
     public function pushToArray(string $collection, array $document, string $arrayName, $arrayElement)
     {
         $this->dm->selectCollection($collection)->updateOne(

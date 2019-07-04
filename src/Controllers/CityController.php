@@ -52,14 +52,13 @@ class CityController
 
     public function testAll()
     {
-        $cities = $this->city->testAll();
+        $cities = $this->city->all();
         $this->response->setContent(print_r($cities, true));
     }
 
-    public function testAddOfferCount()
+    public function testAddOfferCounts()
     {
-        $this->city->loadFromArray(['regionId' => 1, 'name' => 'Test']);
-        $this->city->addOfferCount(['count' => 1, 'created_at' => new \DateTime()]);
+        $this->city->addOfferCounts();
         $cities = $this->city->testAll();
         $this->response->setContent(print_r($cities, true));
     }

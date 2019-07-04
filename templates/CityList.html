@@ -161,14 +161,14 @@
         cities.forEach(function(el) {
             //array_push
             var myGeoObject = new ymaps.Placemark([el.x, el.y], {
-                hintContent: el.name + ": " + el.latest_offer_count['count'],
-                cityID: el.id
+                hintContent: el.name + ": " + el.offer_counts_last['count'],
+                regionId: el.region_id
             });
             myMap.geoObjects.add(myGeoObject);
             myGeoObject.events.add(['click'],  function (e) {
                 var target = e.get('target');
-                var cityID = target.properties.get('cityID');
-                showOfferCountHistory(cityID);
+                var regionId = target.properties.get('regionId');
+                showOfferCountHistory(regionId);
             })
         });
 
