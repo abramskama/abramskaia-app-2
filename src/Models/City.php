@@ -10,13 +10,16 @@ class City
     private $name;
 
     private $db;
+    private $offerCount;
+
     private $collection = 'Cities';
 
     private $client;
 
-    public function __construct(Db $db)
+    public function __construct(Db $db, OfferCount $offerCount)
     {
         $this->db = $db;
+        $this->offerCount = $offerCount;
     }
 
     private function loadClient()
@@ -56,9 +59,19 @@ class City
         return $this->db->getDocuments($this->collection);
     }
 
-    public function addOfferCount(array $data)
+    public function addOfferCounts()
     {
-        $this->db->pushToArray($this->collection, ['name' => $this->name], 'offer_counts', $data);
+        $this->loadClient();
+        $regionIDList =  $this->client->getRegionIDList();
+
+        foreach($regionIDList as $regionID) {
+
+            if($count =  $this->client->getCityOfferCount($regionID)) {
+                $this->offerCount->loadFromArray(['regionId' => $regionID, 'count' => $count]);
+                $this->offerCount->save();
+            }
+
+        }
     }
 
     public function loadCities()
@@ -74,6 +87,11 @@ class City
             if($name =  $this->client->getCityName($regionID)) {
                 $this->loadFromArray(['regionId' => $regionID, 'name' => $name]);
                 $this->save();
+            }
+
+            if($count =  $this->client->getCityOfferCount($regionID)) {
+                $this->offerCount->loadFromArray(['regionId' => $regionID, 'count' => $count]);
+                $this->offerCount->save();
             }
 
         }
