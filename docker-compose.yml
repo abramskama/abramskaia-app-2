@@ -6,7 +6,7 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
-    image: digitalocean.com/php
+    image: php/php
     container_name: app
     restart: unless-stopped
     tty: true
@@ -46,6 +46,7 @@ services:
   mongodb:
     image: mongo
     container_name: mongodb
+    restart: unless-stopped
     ports:
       - 27017:27017
     environment:

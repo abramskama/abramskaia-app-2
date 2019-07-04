@@ -4,4 +4,5 @@ namespace App\Template;
 
 interface FrontendRenderer extends Renderer
 {
+    public function render($template, $data = []) : string;
 }
