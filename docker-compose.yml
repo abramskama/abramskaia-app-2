@@ -28,6 +28,13 @@ services:
     depends_on:
       - mongodb
 
+  &scheduler-service scheduler:
+    <<: *app-service-template
+    restart: always
+    container_name: scheduler
+    hostname: *scheduler-service
+    command: php command.php schedule
+
   #Nginx Service
   webserver:
     image: nginx:alpine
